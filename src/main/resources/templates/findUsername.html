@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{default}">
+
+<head>
+  <title>아이디 찾기</title>
+</head>
+
+<body class="text-center">
+  <div layout:fragment="content">
+    <form class="form-signin" th:action="@{/findUsernameByName}" method="GET">
+      <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72" />
+      <h1 class="h3 mb-3 font-weight-normal">APP_NAME</h1>
+      <div th:if="${param.error}">
+        Invalid Name.
+      </div>
+      <label for="inputName" class="sr-only">이름</label>
+      <input type="text" name="name" id="inputName" class="form-control" placeholder="Name" required="" />
+      <button classs="btn btn-lg btn-primary btn-block" type="submit">아이디 찾기</button>
+    </form>
+    <div th:if="${name != null}">
+      <span th:text="|${name}님의 username은 ${username} 입니다.|" />
+    </div>
+    <form class="form-signin" th:action="@{/login}" method="GET">
+      <button class="btn btn-md btn-success btn-block" type="Submit">로그인</button>
+    </form>
+    <form class="form-signin" th:action="@{/signup}" method="GET">
+      <button class="btn btn-md btn-success btn-block" type="Submit">회원가입</button>
+    </form>
+    <a th:href="@{/findPassword}">비밀번호 찾기</a>
+  </div>
+</body>
+
+</html>

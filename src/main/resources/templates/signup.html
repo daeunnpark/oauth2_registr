@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{default}">
+
+<head>
+  <title>회원가입</title>
+</head>
+
+<body>
+  <div layout:fragment="content">
+    <form class="form-signin" th:action="@{/signup}" method="POST">
+      <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72" />
+      <h1 class="h3 mb-3 font-weight-normal">APP_NAME</h1>
+      <div th:if="${param.error}">
+        아이디와 비밀번호 일치하지 않음
+      </div>
+      <div th:if="${param.logout}">
+        로그아웃 완료
+      </div>
+      <!--
+                <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Incorrect date</div>
+                <p th:if="${#fields.hasErrors('username')}" class="label label-danger" th:errors="*{error.username}">Incorrect LP</p>
+                <label th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="validation-message"></label>
+				-->
+      <label for="inputName" class="sr-only">이름</label>
+      <input type="text" name="name" id="inputName" class="form-control" placeholder="Name" required="" />
+      <label for="inputUsername" class="sr-only">아이디</label>
+      <input type="text" name="username" id="inputUsername" class="form-control" placeholder="Username" required="" />
+      <label for="inputPassword" class="sr-only">비밀번호</label>
+      <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required="" />
+      <button class="btn btn-lg btn-primary btn-block" type="submit">회원가입</button>
+    </form>
+    <form class="form-signin" th:action="@{/login}" method="GET">
+      <button class="btn btn-md btn-success btn-block" type="Submit">로그인</button>
+    </form>
+    <a th:href="@{/findUsername}">아이디 |</a>
+    <a th:href="@{/findPassword}"> 비밀번호 찾기</a>
+  </div>
+</body>
+
+</html>

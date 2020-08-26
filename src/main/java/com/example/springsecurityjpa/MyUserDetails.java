@@ -12,12 +12,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.example.springsecurityjpa.model.User;
 
 public class MyUserDetails implements UserDetails{
+	private String name;
 	private String username;
 	private String password;
 	private boolean active;
 	private List<GrantedAuthority> authorities;
 	
 	public MyUserDetails(User user) {
+		this.name=user.getName();
 		this.username = user.getUsername();
 		this.password = user.getPassword();
 		this.active = user.isActive();
@@ -59,6 +61,10 @@ public class MyUserDetails implements UserDetails{
 	@Override
 	public boolean isEnabled() {
 		return active;
+	}
+	
+	public String getName() {
+		return name;
 	}
 
 }

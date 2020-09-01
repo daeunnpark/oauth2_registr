@@ -7,17 +7,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.example.springsecurityjpa.MyUserDetailService;
+import com.example.springsecurityjpa.service.MyUserDetailService;
 import com.example.springsecurityjpa.model.User;
 
-@Controller
+@RestController
 public class LoginController {
+	
 	@Autowired
 	MyUserDetailService myUserDetailService;
 	
@@ -28,24 +30,25 @@ public class LoginController {
 	    return modelAndView;
 	}
 	
+	@GetMapping("/login")
 	public ModelAndView login() {
-		ModelAndView loginPage = new ModelAndView();
-		loginPage.setViewName("login");
-		return loginPage;
+		ModelAndView page = new ModelAndView();
+		page.setViewName("login");
+		return page;
 	}
 	
-	@RequestMapping(value = "/signup", method = RequestMethod.GET)
+	@GetMapping("/signup")
 	public ModelAndView signup() {
-	    ModelAndView signupPage = new ModelAndView();
+	    ModelAndView page = new ModelAndView();
 	    User user = new User();
-	    signupPage.addObject("user", user);
-	    signupPage.setViewName("signup"); 
-	    return signupPage;
+	    page.addObject("user", user);
+	    page.setViewName("signup"); 
+	    return page;
 	}
 	
-	@RequestMapping(value = "/signup", method = RequestMethod.POST)
+	//TODO: ADD when user is already existing
+	@PostMapping("/signup")
 	public ModelAndView createNewUser(User user, BindingResult bindingResult) {
-	    System.out.println("SIGN UP HEREEE");
 	    System.out.println(user.getUsername());
 	    System.out.println(user.getPassword());
 	    System.out.println(user.getName());
@@ -59,7 +62,7 @@ public class LoginController {
 	    }
 	    
 	    if(bindingResult.hasErrors()) {
-	    	System.out.println("has errors");
+	    	System.out.println("has errors - already existing");
 	    	page.setViewName("signup");
 	    }else {
 	    	myUserDetailService.saveUser(user);
@@ -71,63 +74,61 @@ public class LoginController {
 	    return page;
 	}
 	
-	@RequestMapping(value = "/user", method = RequestMethod.GET)
+	@GetMapping("/user")
 	public ModelAndView user() {
-		ModelAndView userPage = new ModelAndView();
+		ModelAndView page = new ModelAndView();
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = myUserDetailService.findByUsername(auth.getName());	// auth default setting 조사
-		userPage.addObject("currentUser", user);
-		userPage.addObject("username", user.getUsername());
-		userPage.addObject("name", user.getName());
-		userPage.addObject("id", user.getId());
-		userPage.setViewName("user");
+		page.addObject("currentUser", user);
+		page.addObject("username", user.getUsername());
+		page.addObject("name", user.getName());
+		page.addObject("id", user.getId());
+		page.setViewName("user");
 		
-		return userPage;
+		return page;
 	}
-
 	
-	@RequestMapping(value = "/findUsername", method = RequestMethod.GET)
+	@GetMapping("/findUsername")
 	public ModelAndView findUsername() {
-		ModelAndView findUsernamePage = new ModelAndView();
-		findUsernamePage.setViewName("findUsername");
-		return findUsernamePage;
+		ModelAndView page = new ModelAndView();
+		page.addObject("user", new User());
+		page.setViewName("findUsername");
+		return page;
 	}
 	
-	//TODO: ADD when user is not fouhd
-	@RequestMapping(value = "/findUsernameByName", method = RequestMethod.GET)
+	//TODO: ADD when user is not found
+	@GetMapping("/findUsernameByName")
 	public ModelAndView findUserNameByName(@RequestParam(value = "name", required = true) String name){
-		System.out.println("name = " + name);
-		ModelAndView findUserNamePage = new ModelAndView();
+		ModelAndView page = new ModelAndView();
 		User user = myUserDetailService.findByName(name);
-		
-		findUserNamePage.addObject("name", user.getName());
-		findUserNamePage.addObject("username", user.getUsername());
-		findUserNamePage.setViewName("findUsername");
+
+		page.addObject("name", user.getName());
+		page.addObject("username", user.getUsername());
+		page.setViewName("findUsername");
 		 
-		return findUserNamePage;
+		return page;
 	}
 	
 	//TODO: ADD when username is not found
-	@RequestMapping(value = "/findPassword", method = RequestMethod.GET)
+	@GetMapping(value = "/findPassword")
 	public ModelAndView findPassword() {
-		ModelAndView findPasswordPage = new ModelAndView();
-		findPasswordPage.setViewName("findPassword");
-		return findPasswordPage;
+		ModelAndView page = new ModelAndView();
+		page.addObject("user", new User());	
+		page.setViewName("findPassword");
+		return page;
 	}
 	
-	@RequestMapping(value = "/findPasswordByUsername", method = RequestMethod.GET)
+	@GetMapping(value = "/findPasswordByUsername")
 	public ModelAndView indPasswordByUsername(@RequestParam(value = "username", required = true) String username){
 		System.out.println("username = " + username);
-		ModelAndView findPasswordPage = new ModelAndView();
+		ModelAndView page = new ModelAndView();
 		User user = myUserDetailService.findByUsername(username);
 		
-		findPasswordPage.addObject("username", user.getUsername());
-		findPasswordPage.addObject("password", user.getPassword());
-		findPasswordPage.setViewName("findUsername");
+		page.addObject("username", user.getUsername());
+		page.addObject("password", user.getPassword());
+		page.setViewName("findPassword");
 		 
-		return findPasswordPage;
+		return page;
 	}
 	
-	
-
 }

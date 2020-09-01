@@ -1,7 +1,9 @@
-package com.example.springsecurityjpa;
+package com.example.springsecurityjpa.service;
 
 import java.util.Arrays;
 import java.util.Optional;
+
+import javax.naming.NameNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,8 +12,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.springsecurityjpa.model.MyUserDetails;
 import com.example.springsecurityjpa.model.User;
-import com.example.springsecurityjpa.model.UserRepository;
+import com.example.springsecurityjpa.repository.UserRepository;
 
 @Service
 public class MyUserDetailService implements UserDetailsService{
@@ -24,22 +27,24 @@ public class MyUserDetailService implements UserDetailsService{
     BCryptPasswordEncoder bCryptPasswordEncoder;
     */
 	
-	public User findByUsername(String username) {
-		return userRepository.findByUsername(username);
+	public boolean exists(String username) {
+		return userRepository.existsByUsername(username);
 	}
 	
-	public boolean exists(String username) {
-		return userRepository.findByUsername(username)!=null;
+	public User findByUsername(String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+        user.orElseThrow(() -> new UsernameNotFoundException("Not found: " + username));
+        return user.get();
 	}
 	
 	@Override
 	public UserDetails loadUserByUsername(String username)  {
-		User user = userRepository.findByUsername(username);		
-		return new MyUserDetails(user);
+        Optional<User> user = userRepository.findByUsername(username);
+        user.orElseThrow(() -> new UsernameNotFoundException("Not found: " + username));
+        return user.map(MyUserDetails::new).get();
 	}
 	
 	public void saveUser(User user) {
-		System.out.println("Saving");
 		System.out.println("name = " + user.getName());
 		user.setActive(true);
 		user.setRoles("ROLE_USER");
@@ -47,7 +52,9 @@ public class MyUserDetailService implements UserDetailsService{
 	}
 	
 	public User findByName(String name) {
-		return userRepository.findByName(name);	
+		Optional<User> user = userRepository.findByName(name);	
+        user.orElseThrow(() -> new UsernameNotFoundException("Not found: " + name));
+        return user.get();
 	}
 
 }

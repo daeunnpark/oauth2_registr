@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
@@ -28,26 +29,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userDetailsService); 
+		/*
+		auth.inMemoryAuthentication()
+			.withUser("a")
+			.password("b")
+			.roles("USER");
+			*/
 	}
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		
 		http.authorizeRequests()
-				.antMatchers("/admin")
-					.hasRole("ADMIN")
-				.antMatchers("/user")
-					.hasAnyRole("USER")
-				.antMatchers("/")
-					.permitAll()
-					.and()
-				.formLogin()
-					.loginPage("/login")
-	            	.and()
-	            .logout()
-                	.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                	.and()
-		        .exceptionHandling();
+		        .antMatchers("/user").hasAnyRole("ADMIN", "USER")
+		        .antMatchers("/").permitAll()
+		        .and()
+		        .formLogin()
+		        .loginPage("/login");
+		
+		/*
+		http.sessionManagement()
+    	.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+    	*/
 	}
 	
 	@Override
@@ -61,36 +63,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	public PasswordEncoder getPasswordEncoder() {
 		return NoOpPasswordEncoder.getInstance();
 	}
-
-	
-	/*		
-	http.authorizeRequests()
-			.anyRequest()
-				.authenticated()
-				.and()
-			.formLogin()
-				.permitAll()
-				.and()
-			.logout()
-				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-				.invalidateHttpSession(true)
-				.deleteCookies("JSESSIONID")
-				.permitAll();
-	
-	
-	
-
-	http
-    .authorizeRequests()
-        .antMatchers("/").permitAll()
-        .antMatchers("/login").permitAll()
-        .antMatchers("/signup").permitAll()
-        .antMatchers("/dashboard/**").hasAuthority("ADMIN").anyRequest()
-        .authenticated().and().csrf().disable().formLogin()
-        .loginPage("/login")
-        .and().logout()
-        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-        .logoutSuccessUrl("/").and().exceptionHandling();
-		*/
-	
 }

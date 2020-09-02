@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{default}">
+
+<head>
+  <title>Oauth2 앱 등록</title>
+</head>
+
+<body>
+  <div layout:fragment="content">
+    <form class="form-signin" th:action="@{/app/register}" method="POST">
+      <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72" />
+      <h1 class="h3 mb-3 font-weight-normal"> 앱 등록</h1>
+      <div th:if="${param.error}">
+        에러
+      </div>
+      <label for="inputName" class="sr-only">앱 이름</label>
+      <input type="text" name="name" id="inputName" class="form-control" placeholder="App Name" required="" />
+      <label for="inputHomepageUrl" class="sr-only">앱 홈페이지 URL</label>
+      <input type="text" name="homepageUrl" id="inputHomepageUrl" class="form-control" placeholder="App Homepage URL" required="" />
+      <button class="btn btn-lg btn-primary btn-block" type="submit">등록</button>
+    </form>
+  </div>
+</body>
+
+</html>
+

@@ -45,7 +45,6 @@ public class MyUserDetailService implements UserDetailsService{
 	}
 	
 	public void saveUser(User user) {
-		System.out.println("name = " + user.getName());
 		user.setActive(true);
 		user.setRoles("ROLE_USER");
 		userRepository.save(user);

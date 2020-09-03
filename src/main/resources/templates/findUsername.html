@@ -8,8 +8,7 @@
 <body class="text-center">
   <div layout:fragment="content">
     <form class="form-signin" th:action="@{/findUsernameByName}" method="GET">
-      <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72" />
-      <h1 class="h3 mb-3 font-weight-normal">OH AUTH</h1>
+      <h1 class="h3 mb-3 font-weight-normal">아이디 찾기</h1>
       <div th:if="${param.error}">
         Invalid Name.
       </div>

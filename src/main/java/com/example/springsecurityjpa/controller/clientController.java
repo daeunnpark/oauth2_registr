@@ -2,9 +2,8 @@ package com.example.springsecurityjpa.controller;
 
 import com.example.springsecurityjpa.model.Oauth2Client;
 import com.example.springsecurityjpa.model.User;
-import com.example.springsecurityjpa.repository.Oauth2ClientRepository;
 import com.example.springsecurityjpa.service.CustomOauth2ClientDetailsService;
-import com.example.springsecurityjpa.service.MyUserDetailService;
+import com.example.springsecurityjpa.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -14,13 +13,13 @@ import java.security.NoSuchAlgorithmException;
 
 @RestController
 @RequestMapping(path = "/app")
-public class appController {
+public class clientController {
 
     @Autowired
-    MyUserDetailService myUserDetailService;
+    CustomUserDetailsService userService;
 
     @Autowired
-    CustomOauth2ClientDetailsService customOauth2ClientDetailsService;
+    CustomOauth2ClientDetailsService clientService;
 
     @GetMapping("/register")
     public ModelAndView registerPage() {
@@ -32,42 +31,35 @@ public class appController {
 
     @PostMapping("/register")
     public ModelAndView register(Oauth2Client client, Authentication auth) throws NoSuchAlgorithmException {
-
-        User user = myUserDetailService.findByUsername(auth.getName());
+        User user = userService.findByUsername(auth.getName());
         client.setUser(user);
-        String name = client.getName();
-
-        customOauth2ClientDetailsService.save(client);
-        return new ModelAndView("redirect:/app/view/"+name);
+        clientService.save(client);
+        return new ModelAndView("redirect:/app/view/" + client.getName());
     }
 
     @GetMapping("/view/all")
     public ModelAndView viewApps(Authentication auth) {
-        User user = myUserDetailService.findByUsername(auth.getName());
-        System.out.println("auth name = " + auth.getName());
-        System.out.println("user id = " + user.getId());
-        System.out.println(customOauth2ClientDetailsService.findByUserId(user.getId()));
+        User user = userService.findByUsername(auth.getName());
         ModelAndView page = new ModelAndView();
-        page.addObject("clients", customOauth2ClientDetailsService.findByUserId(user.getId()));
+        page.addObject("clients", clientService.findByUserId(user.getId()));
         page.setViewName("viewAll");
         return page;
     }
 
     @GetMapping("/view/{name}")
     public ModelAndView viewApp(Authentication auth, @PathVariable String name) {
-        User user = myUserDetailService.findByUsername(auth.getName());
+        User user = userService.findByUsername(auth.getName());
         ModelAndView page = new ModelAndView();
-        page.addObject("client", customOauth2ClientDetailsService.findByUserIdAndName(user.getId(), name));
+        page.addObject("client", clientService.findByUserIdAndName(user.getId(), name));
         page.setViewName("view");
         return page;
     }
 
     @PostMapping("/delete/{name}")
     public ModelAndView deleteApp(Authentication auth, @PathVariable String name) {
-        User user = myUserDetailService.findByUsername(auth.getName());
-        customOauth2ClientDetailsService.delete(customOauth2ClientDetailsService.findByUserIdAndName(user.getId(), name));
+        User user = userService.findByUsername(auth.getName());
+        clientService.delete(clientService.findByUserIdAndName(user.getId(), name));
         return new ModelAndView("redirect:/app/view/all");
     }
-
 
 }

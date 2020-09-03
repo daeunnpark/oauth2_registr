@@ -1,26 +1,35 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{default}">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{default}">
 
 <head>
-  <title>나의 Oauth2 앱 모두보기</title>
+    <title>나의 Oauth2 앱 모두보기</title>
 </head>
 
 <body>
-  <div layout:fragment="content">
-      <form class="form-signin" th:action="@{/app/register}" method="GET">
-      <button class="btn btn-md btn-success btn-block" type="Submit">새 Oauth2 추가</button>
-    </form>
-
-    <div th:each = "client: ${clients}">
-    	<div th:text="${client.name}"></div>
-            <form class="form-signin" th:action="@{/app/view/}+${client.name}" method="GET">
-                <button class="btn btn-md btn-success btn-block" type="Submit">앱 관리</button>
-            </form>
+    <div layout:fragment="content">
+        <h1>나의 Oauth2 앱</h1>
+        <form class="form-signin" th:action="@{/app/register}" method="GET">
+            <button class="btn btn-md btn-success btn-block" type="Submit">새 Oauth2 추가</button>
+        </form>
+        <div>
+            <table>
+            <tr>
+                <th>앱 이름</th>
+                <th>앱 관리</th>
+            </tr>
+                <div th:each="client: ${clients}">
+                    <tr>
+                        <td th:text="${client.name}"></td>
+                        <form class="form-signin" th:action="@{/app/view/}+${client.name}" method="GET">
+                            <td><button class="btn btn-md btn-success btn-block" type="Submit">앱 관리</button></td>
+                        </form>
+                    </tr>
+                </div>
+            </table>
+        </div>
     </div>
-  </div>
-  <form class="form-signin" th:action="@{/signup}" method="GET">
-      <button class="btn btn-md btn-success btn-block" type="Submit">회원가입</button>
-  </form>
 </body>
 
 </html>
+

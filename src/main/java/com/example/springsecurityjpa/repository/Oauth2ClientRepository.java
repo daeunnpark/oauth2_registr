@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface Oauth2ClientRepository extends JpaRepository<Oauth2Client, Integer> {
 	Oauth2Client findByClientId(String clientId);
-	List<Oauth2Client> findByUserId(Integer userId);
-	Optional<Oauth2Client> findByUserIdAndName(Integer id, String name);
+	List<Oauth2Client> findByUserId(String userId);
+	Optional<Oauth2Client> findByUserIdAndName(String userId, String name);
 	void deleteById(Integer id);
 }

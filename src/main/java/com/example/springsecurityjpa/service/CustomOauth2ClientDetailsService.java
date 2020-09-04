@@ -31,11 +31,11 @@ public class CustomOauth2ClientDetailsService implements ClientDetailsService {
         return new BaseClientDetails(client);
     }
 
-    public List<Oauth2Client> findByUserId(Integer userId) {
+    public List<Oauth2Client> findByUserId(String userId) {
         return clientRepository.findByUserId(userId);
     }
 
-    public Oauth2Client findByUserIdAndName(Integer id, String name) {
+    public Oauth2Client findByUserIdAndName(String id, String name) {
         Optional<Oauth2Client> client = clientRepository.findByUserIdAndName(id, name);
         client.orElseThrow(() -> new NoSuchClientException("No client registered with " + name));
         return client.get();
@@ -51,8 +51,7 @@ public class CustomOauth2ClientDetailsService implements ClientDetailsService {
         client.setGrantTypes("authorization_code");
         client.setRefreshTokenValiditySeconds(3600);
         client.setResourceIds("oauth2-resource");
-        client.setScope("read");
-
+        client.setScope("id,name,email,phone");
         clientRepository.save(client);
     }
 

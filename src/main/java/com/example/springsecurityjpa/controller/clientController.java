@@ -50,6 +50,10 @@ public class clientController {
     public ModelAndView viewApp(Authentication auth, @PathVariable String name) {
         User user = userService.findByUsername(auth.getName());
         ModelAndView page = new ModelAndView();
+        System.out.println("----------------------------------");
+        Oauth2Client client = clientService.findByUserIdAndName(user.getId(), name);
+        System.out.println(client.toString());
+        System.out.println(client.getClientId() + "         " +  client.getClientSecret());
         page.addObject("client", clientService.findByUserIdAndName(user.getId(), name));
         page.setViewName("view");
         return page;

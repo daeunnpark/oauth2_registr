@@ -17,10 +17,19 @@
       </div>
       <label for="inputName" class="sr-only">이름</label>
       <input type="text" name="name" id="inputName" class="form-control" placeholder="Name" required="" />
+
       <label for="inputUsername" class="sr-only">아이디</label>
       <input type="text" name="username" id="inputUsername" class="form-control" placeholder="Username" required="" />
+
       <label for="inputPassword" class="sr-only">비밀번호</label>
       <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required="" />
+
+      <label for="inputEmail" class="sr-only">이메일</label>
+      <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email" required="" />
+
+      <label for="inputPhone" class="sr-only">핸드폰 번호</label>
+      <input type="text" name="phone" id="inputPhone" class="form-control" placeholder="Phone number" required="" />
+
       <button class="btn btn-lg btn-primary btn-block" type="submit">회원가입</button>
     </form>
     <form class="form-signin" th:action="@{/login}" method="GET">

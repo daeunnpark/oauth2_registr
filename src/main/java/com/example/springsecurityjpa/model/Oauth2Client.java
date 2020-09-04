@@ -31,12 +31,13 @@ public class Oauth2Client implements ClientDetails {
 
     @Override
     public String getClientId() {
-        return null;
+        return this.clientId;
     }
 
     @Override
     public Set<String> getResourceIds() {
-        return null;
+        List<String> resourceIds = Arrays.asList(this.resourceIds.split(","));
+        return new HashSet<String>(resourceIds);
     }
 
     @Override
@@ -46,7 +47,7 @@ public class Oauth2Client implements ClientDetails {
 
     @Override
     public String getClientSecret() {
-        return null;
+        return this.clientSecret;
     }
 
     @Override
@@ -56,7 +57,8 @@ public class Oauth2Client implements ClientDetails {
 
     @Override
     public Set<String> getScope() {
-        return null;
+        List<String> scopes = Arrays.asList(this.scope.split(","));
+        return new HashSet<String>(scopes);
     }
 
     @Override

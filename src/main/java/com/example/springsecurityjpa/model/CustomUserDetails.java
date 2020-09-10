@@ -9,15 +9,17 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CustomUserDetails implements UserDetails {
 
-    private final String username;
-    private final String password;
-    private final boolean active;
-    private final List<GrantedAuthority> authorities;
+public class CustomUserDetails implements UserDetails{
+    private String name;
+    private String username;
+    private String password;
+    private boolean active;
+    private List<GrantedAuthority> authorities;
 
     public CustomUserDetails(User user) {
-		this.username = user.getUsername();
+        this.name=user.getName();
+        this.username = user.getUsername();
         this.password = user.getPassword();
         this.active = user.isActive();
         this.authorities = Arrays.stream(user.getRoles().split(","))
@@ -27,17 +29,17 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+        return this.authorities;
     }
 
     @Override
     public String getPassword() {
-        return password;
+        return this.password;
     }
 
     @Override
     public String getUsername() {
-        return username;
+        return this.username;
     }
 
     @Override
@@ -57,6 +59,11 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return active;
+        return this.active;
     }
+
+    public String getName() {
+        return this.name;
+    }
+
 }

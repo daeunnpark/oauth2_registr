@@ -15,6 +15,7 @@
                 <th>앱 이름</th>
                 <th>CLIENT ID</th>
                 <th>Client Secret</th>
+                <th>Redirect URL</th>
                 <th>앱 관리</th>
             </tr>
             <tr>
@@ -22,6 +23,7 @@
                 <td th:text="${client.name}"></td>
                 <td th:text="${client.clientId}"></td>
                 <td th:text="${client.clientSecret}"></td>
+                <td th:text="${client.redirectUri}"></td>
                 <td><button class="btn btn-md btn-success btn-block" type="Submit">앱 지우기</button></td>
                 </form>
             </tr>

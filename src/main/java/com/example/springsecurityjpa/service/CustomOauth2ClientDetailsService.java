@@ -31,19 +31,20 @@ public class CustomOauth2ClientDetailsService implements ClientDetailsService {
         return new BaseClientDetails(client);
     }
 
-    public List<Oauth2Client> findByUserId(String userId) {
-        return clientRepository.findByUserId(userId);
+    public List<Oauth2Client> findByUsername(String username) {
+        return clientRepository.findByUserUsername(username);
     }
 
-    public Oauth2Client findByUserIdAndName(String id, String name) {
-        Optional<Oauth2Client> client = clientRepository.findByUserIdAndName(id, name);
-        client.orElseThrow(() -> new NoSuchClientException("No client registered with " + name));
+    public Oauth2Client findByUsernameAndName(String username, String appName) {
+        Optional<Oauth2Client> client = clientRepository.findByUserUsernameAndName(username, appName);
+        client.orElseThrow(() -> new NoSuchClientException("No client registered with " + appName));
         return client.get();
     }
 
     public void save(Oauth2Client client) throws NoSuchAlgorithmException {
         client.setClientId(client.getName() + System.currentTimeMillis());
         client.setClientSecret(sha256(UUID.randomUUID().toString()));
+        System.out.println("client redirect " + client.getRegisteredRedirectUri());
         //client.setRedirectUri("http://10.113.97.165:8081");
         client.setAccessTokenValiditySeconds(3600);
         client.setAuthorities("USER");

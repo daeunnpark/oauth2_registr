@@ -32,6 +32,8 @@ public class clientController {
     @PostMapping("/register")
     public ModelAndView register(Oauth2Client client, Authentication auth) throws NoSuchAlgorithmException {
         User user = userService.findByUsername(auth.getName());
+        System.out.println("name" + client.getName());
+        System.out.println("registered uri " + client.getRegisteredRedirectUri());
         client.setUser(user);
         clientService.save(client);
         return new ModelAndView("redirect:/app/view/" + client.getName());
@@ -39,19 +41,19 @@ public class clientController {
 
     @GetMapping("/view/all")
     public ModelAndView viewApps(Authentication auth) {
-        User user = userService.findByUsername(auth.getName());
+        //User user = userService.findByUsername(auth.getName());
         ModelAndView page = new ModelAndView();
-        page.addObject("clients", clientService.findByUserId(user.getId()));
+        page.addObject("clients", clientService.findByUsername(auth.getName()));
         page.setViewName("viewAll");
         return page;
     }
 
     @GetMapping("/view/{name}")
     public ModelAndView viewApp(Authentication auth, @PathVariable String name) {
-        User user = userService.findByUsername(auth.getName());
+       // User user = userService.findByUsername(auth.getName());
         ModelAndView page = new ModelAndView();
-        Oauth2Client client = clientService.findByUserIdAndName(user.getId(), name);
-        page.addObject("client", clientService.findByUserIdAndName(user.getId(), name));
+        Oauth2Client client = clientService.findByUsernameAndName(auth.getName(), name);
+        page.addObject("client", clientService.findByUsernameAndName(auth.getName(), name));
         page.setViewName("view");
         return page;
     }
@@ -59,7 +61,7 @@ public class clientController {
     @PostMapping("/delete/{name}")
     public ModelAndView deleteApp(Authentication auth, @PathVariable String name) {
         User user = userService.findByUsername(auth.getName());
-        clientService.delete(clientService.findByUserIdAndName(user.getId(), name));
+        clientService.delete(clientService.findByUsernameAndName(auth.getName(), name));
         return new ModelAndView("redirect:/app/view/all");
     }
 

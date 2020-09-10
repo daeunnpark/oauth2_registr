@@ -61,7 +61,6 @@ public class loginController {
         page.addObject("currentUser", user);
         page.addObject("username", user.getUsername());
         page.addObject("name", user.getName());
-        page.addObject("id", user.getId());
         page.setViewName("user");
 
         return page;

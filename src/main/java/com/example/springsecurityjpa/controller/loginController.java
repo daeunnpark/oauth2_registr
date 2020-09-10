@@ -38,6 +38,8 @@ public class loginController {
 
     @PostMapping("/signup")
     public ModelAndView createNewUser(User user, BindingResult bindingResult) {
+        System.out.println("signup heree");
+        System.out.println(user.toString());
         if (userService.exists(user.getUsername())) {
             bindingResult
                     .rejectValue("username", "error.username",

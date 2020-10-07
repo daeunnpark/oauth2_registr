@@ -31,3 +31,23 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Mac ###
+/.DS_Store
+
+### Maven ###
+/.mvn/
+/mvnw
+mvnw.cmd
+/log/
+*.log*
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.next
+release.properties
+
+
+### Bin
+bin/
+
